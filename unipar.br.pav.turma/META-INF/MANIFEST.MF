@@ -1,0 +1,11 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Turma
+Bundle-SymbolicName: unipar.br.pav.turma;singleton:=true
+Bundle-Version: 1.0.0.qualifier
+Bundle-Activator: unipar.br.pav.turma.Activator
+Bundle-Vendor: Unipar Toledo
+Require-Bundle: org.eclipse.ui,
+ org.eclipse.core.runtime
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Bundle-ActivationPolicy: lazy
