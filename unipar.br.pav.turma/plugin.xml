@@ -7,7 +7,7 @@
          point="org.eclipse.core.runtime.applications">
       <application>
          <run
-               class="unipar.br.pav.turma.Application">
+               class="unipar.br.pav.turma.application.Application">
          </run>
       </application>
    </extension>
@@ -15,7 +15,7 @@
          point="org.eclipse.ui.perspectives">
       <perspective
             name="Perspective"
-            class="unipar.br.pav.turma.Perspective"
+            class="unipar.br.pav.turma.perspective.Perspective"
             id="unipar.br.pav.turma.perspective">
       </perspective>
    </extension>
@@ -23,7 +23,7 @@
          point="org.eclipse.ui.views">
       <view
             name="View"
-            class="unipar.br.pav.turma.View"
+            class="unipar.br.pav.turma.telas.view.View"
             id="unipar.br.pav.turma.view">
       </view>
    </extension>
@@ -45,13 +45,31 @@
       <menuContribution
             locationURI="menu:org.eclipse.ui.main.menu">
          <menu
-               label="File">
+               id="unipar.br.pav.turma.arquivo"
+               label="Arquivo">
             <command
                   commandId="org.eclipse.ui.file.exit"
-                  label="Exit">
+                  id="unipar.br.pav.turma.sair"
+                  label="Sair">
             </command>
          </menu>
+         <command
+               commandId="unipar.br.pav.turma.command1"
+               style="push">
+         </command>
+         <menu
+               id="unipar.br.pav.turma.cadastro"
+               label="Cadastro">
+         </menu>
       </menuContribution>
+   </extension>
+   <extension
+         point="org.eclipse.ui.editors">
+      <editor
+            class="unipar.br.pav.turma.telas.editor.UsuarioEditor"
+            id="unipar.br.pav.turma.telas.editor.UsuarioEditor"
+            name="Usuário">
+      </editor>
    </extension>
 
 </plugin>
