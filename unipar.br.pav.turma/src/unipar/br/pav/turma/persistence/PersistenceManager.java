@@ -19,7 +19,7 @@ import com.google.common.collect.Maps;
 
 import unipar.br.pav.turma.Activator;
 import unipar.br.pav.turma.EclipseLogger;
-import unipar.br.pav.turma.application.utils.SingleValue;
+import unipar.br.pav.turma.aplicacao.internal.utils.SingleValue;
 
 public class PersistenceManager {
 	
@@ -27,14 +27,14 @@ public class PersistenceManager {
 	private EclipseLogger logger = new EclipseLogger(Activator.getDefault());
 	private static final ThreadLocal<EntityManager> ENTITY_MANAGER_CACHE = new ThreadLocal<>();
 	/**
-	 * Criado um single value para não manter referência estática direta ao EntityManagerFactory
-	 * para que o sistema faça o GC (Garbage Collect) dele.
+	 * Criado um single value para nï¿½o manter referï¿½ncia estï¿½tica direta ao EntityManagerFactory
+	 * para que o sistema faï¿½a o GC (Garbage Collect) dele.
 	 */
 	private EntityManagerFactory entityManagerFactory;
 	private final Map<Thread, EntityManager> entityManagers = Maps.newHashMap();
 	
 	/**
-	 * Utilizando single value para permitir que o GC limpe a memória.
+	 * Utilizando single value para permitir que o GC limpe a memï¿½ria.
 	 */
 	private SingleValue<EMForQueries> queryEntityManagerValue = SingleValue.create();
 	private EntityManager uiEntityManager;
@@ -52,18 +52,18 @@ public class PersistenceManager {
 	}
 	
 	private synchronized void initializeEntityManagerFactory() {
-		// Se já tem um entity manager factory, retorna
+		// Se jï¿½ tem um entity manager factory, retorna
 		if(entityManagerFactory != null)
 			return;
 		
 		Map<String, Object> props = getDefaultProperties();
 		
-		// Cria tabelas novas (mas não atualiza)
+		// Cria tabelas novas (mas nï¿½o atualiza)
 		logger.logInfo("Gerando tabelas...");
 		props.put(PersistenceUnitProperties.DDL_GENERATION, PersistenceUnitProperties.CREATE_OR_EXTEND);
 		props.put(PersistenceUnitProperties.DDL_GENERATION_MODE, PersistenceUnitProperties.DDL_DATABASE_GENERATION);
 
-		// Para criar só um entity manager factory
+		// Para criar sï¿½ um entity manager factory
 		logger.logInfo("Criando EntityManagerFactory.");
 		entityManagerFactory = new PersistenceProvider().createEntityManagerFactory("gtech", props);
 	}
@@ -95,12 +95,12 @@ public class PersistenceManager {
 	}
 	
 	/**
-	 * Retorna um {@link EntityManager}. Caso não exista, cria um novo
+	 * Retorna um {@link EntityManager}. Caso nï¿½o exista, cria um novo
 	 * @param thread
 	 */
 	public synchronized EntityManager getEntityManager(Thread thread) {
 		EntityManager entityManager = entityManagers.get(thread);
-		// Se não tem um EM
+		// Se nï¿½o tem um EM
 		if (entityManager == null) {
 			// Reinicia
 			initializeEntityManagerFactory();
@@ -124,9 +124,9 @@ public class PersistenceManager {
 	}
 
 	public synchronized EMForQueries getQueryEntityManager() {
-		// Se não tiver um entity manager para query criado, ele cria
+		// Se nï¿½o tiver um entity manager para query criado, ele cria
 		if (queryEntityManagerValue.get() == null) {
-//			log.info(String.format("queryEntityManager é null para o Thread [%s]", Thread.currentThread().getName()));
+//			log.info(String.format("queryEntityManager ï¿½ null para o Thread [%s]", Thread.currentThread().getName()));
 			queryEntityManagerValue.set(new EMForQueries());
 			queryEntityManagerValue.get().start();
 		}
@@ -134,10 +134,10 @@ public class PersistenceManager {
 	}
 	
 	/**
-	 * As vezes, é necessário comparar o valor de um objeto da aplicação com o
-	 * banco, e usando o {@link getEntityManager}, o EclipseLink não vai buscar
-	 * do banco, e sim da sessão. Então, usa-se um EntityManager novo para
-	 * buscar o objeto. Esse {@link EntityManager} não deve ser usado sempre.
+	 * As vezes, ï¿½ necessï¿½rio comparar o valor de um objeto da aplicaï¿½ï¿½o com o
+	 * banco, e usando o {@link getEntityManager}, o EclipseLink nï¿½o vai buscar
+	 * do banco, e sim da sessï¿½o. Entï¿½o, usa-se um EntityManager novo para
+	 * buscar o objeto. Esse {@link EntityManager} nï¿½o deve ser usado sempre.
 	 */
 	public EntityManager getIsolatedEntityManager() {
 		EntityManager em = entityManagerFactory.createEntityManager();
@@ -209,7 +209,7 @@ public class PersistenceManager {
 	}
 	
 	/**
-	 * Retorna um {@link EntityManager}. Caso não exista, cria um novo
+	 * Retorna um {@link EntityManager}. Caso nï¿½o exista, cria um novo
 	 */
 	public synchronized EntityManager getEntityManager() {
 		EntityManager entityManager = ENTITY_MANAGER_CACHE.get();

@@ -3,7 +3,6 @@ package unipar.br.pav.turma.telas.editor;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.action.Action;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.TraverseEvent;
@@ -37,18 +36,14 @@ public abstract class AbstractEditor extends EditorPart implements ISaveablePart
 	protected ScrolledForm form;
 	protected Button btnSalvar;
 	private Button btnExcluir;
-	private Button btnDesativar;
 	private Composite compositeBottom;
 	
 	private boolean bottomVisible = true;
 	private boolean showExcluir = true;
-	private boolean showDesativar = false;
 	private boolean showSalvar = true;
 	private String textoExcluir;
-	private String textoDesativar;
 	private String textoSalvar;
-	private String mensagemExcluir;
-	private String mensagemDesativar;
+	private String mensagemExcluir = "Tem certeza que deseja excluir o registro?";
 
 	public AbstractEditor() {}
 
@@ -73,18 +68,9 @@ public abstract class AbstractEditor extends EditorPart implements ISaveablePart
 		compositeTop.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
 		formToolkit.paintBordersFor(compositeTop);
 		
-		ScrolledComposite scrolledComposite = new ScrolledComposite(composite, SWT.NONE | SWT.H_SCROLL);
-//		scrolledComposite.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_LIGHT_SHADOW));
-		scrolledComposite.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
-		formToolkit.adapt(scrolledComposite);
-		formToolkit.paintBordersFor(scrolledComposite);
-		scrolledComposite.setExpandHorizontal(true);
-		scrolledComposite.setExpandVertical(true);
-		
-		compositeBottom = new Composite(scrolledComposite, SWT.BORDER);
-
+		compositeBottom = new Composite(composite, SWT.BORDER);
 		compositeBottom.setVisible(bottomVisible);
-		compositeBottom.setLayout(new GridLayout(20, false));
+		compositeBottom.setLayout(new GridLayout(10, false));
 		compositeBottom.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		formToolkit.adapt(compositeBottom);
 		formToolkit.paintBordersFor(compositeBottom);
@@ -101,9 +87,9 @@ public abstract class AbstractEditor extends EditorPart implements ISaveablePart
 		});
 		this.btnSalvar.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
 		formToolkit.adapt(this.btnSalvar, true, true);
-		this.btnSalvar.setText("Salvar | F12");
+		this.btnSalvar.setText("Salvar");
 		//MODIFICAR TEXTO DO BOTÃO DE SALVAR
-		if(!textoSalvar.trim().equals(""))
+		if(textoSalvar != null && !textoSalvar.trim().equals(""))
 			this.btnSalvar.setText(textoSalvar);
 		
 		//CRIA O BOTÃO EXCLUIR
@@ -114,12 +100,12 @@ public abstract class AbstractEditor extends EditorPart implements ISaveablePart
 				@Override
 				public void widgetSelected(SelectionEvent e) {
 					if (MessageHelper.openConfirm(mensagemExcluir))
-						excluirDesativarRegistro();
+						excluirRegistro();
 				}
 			});
 			this.btnExcluir.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
 			formToolkit.adapt(this.btnExcluir, true, true);
-			this.btnExcluir.setText("Excluir | F11");
+			this.btnExcluir.setText("Excluir");
 			//MODIFICAR TEXTO DO BOTÃO DE EXCLUIR
 			if(textoExcluir != null && textoExcluir.trim().equals(""))
 				this.btnExcluir.setText(textoExcluir);
@@ -128,34 +114,7 @@ public abstract class AbstractEditor extends EditorPart implements ISaveablePart
 				mensagemExcluir = "Tem certeza que deseja excluir o registro?";
 		}
 		
-		//CRIA O BOTÃO DESATIVAR
-		if(showDesativar){
-			this.btnDesativar = new Button(compositeBottom, SWT.NONE);
-			this.btnDesativar.setImage(ResourceManager.getPluginImage("desativar/desativar32.png"));
-			this.btnDesativar.addSelectionListener(new SelectionAdapter() {
-				@Override
-				public void widgetSelected(SelectionEvent e) {
-					if (MessageHelper.openConfirm(mensagemDesativar))
-						excluirDesativarRegistro();
-				}
-			});
-			this.btnDesativar.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
-			formToolkit.adapt(this.btnDesativar, true, true);
-			this.btnDesativar.setText("Desativar | F11");
-			//MODIFICAR TEXTO DO BOTÃO DE DESATIVAR
-			if(textoDesativar != null && !textoDesativar.trim().equals(textoDesativar))
-				this.btnDesativar.setText(textoDesativar);
-			//ADEQUAR MENSAGEM DE DESATIVAR
-			if(mensagemDesativar != null && mensagemDesativar.trim().equals(""))
-				mensagemDesativar = "Tem certeza que deseja desativar o registro?";
-		}
-		
 		addComponents(compositeTop);
-		
-		scrolledComposite.setContent(compositeBottom);
-		scrolledComposite.setMinSize(composite.computeSize(SWT.DEFAULT, 25));
-		scrolledComposite.getHorizontalBar().setPageIncrement(1);
-		scrolledComposite.getHorizontalBar().setIncrement(1);
 		
 		form.setContent(compositeTop);
 		form.setMinSize(composite.computeSize(SWT.DEFAULT, SWT.DEFAULT));
@@ -169,9 +128,9 @@ public abstract class AbstractEditor extends EditorPart implements ISaveablePart
 	protected abstract void salvarRegistro();
 
 	/**
-	 * Método para implementar ação para o botão 'Excluir' ou 'Desativar'
+	 * Método para implementar ação para o botão 'Excluir'
 	 */
-	protected abstract void excluirDesativarRegistro();
+	protected abstract void excluirRegistro();
 
 	protected abstract void addComponents(Composite compositeTop);
 	
@@ -233,7 +192,7 @@ public abstract class AbstractEditor extends EditorPart implements ISaveablePart
 
 	public void doDeleteDisable(IProgressMonitor monitor) {
 		monitor.beginTask((showExcluir ? "Excluindo" : "Desativando")+" registro...", IProgressMonitor.UNKNOWN);
-		excluirDesativarRegistro();
+		excluirRegistro();
 		monitor.done();
 	}
 	
@@ -248,16 +207,8 @@ public abstract class AbstractEditor extends EditorPart implements ISaveablePart
 		});
 	}
 	
-	public void setShowDesativar(boolean showDesativar) {
-		this.showDesativar = showDesativar;
-		//SE FOR DESATIVAR, NÃO ATIVA O EXCLUIR
-		this.showExcluir = false;
-	}
-
 	public void setShowExcluir(boolean showExcluir) {
 		this.showExcluir = showExcluir;
-		//SE FOR EXCLUIR, NÃO ATIVA O DESATIVAR
-		this.showDesativar = false;
 	}
 	
 	public void setShowSalvar(boolean showSalvar) {
@@ -272,10 +223,6 @@ public abstract class AbstractEditor extends EditorPart implements ISaveablePart
 		this.textoExcluir = texto;
 	}
 	
-	public void setTextoDesativar(String texto) {
-		this.textoDesativar = texto;
-	}
-
 	/**
 	 * Insere a mensagem de confirmação para excluir registro.
 	 *
@@ -285,15 +232,6 @@ public abstract class AbstractEditor extends EditorPart implements ISaveablePart
 		this.mensagemExcluir = mensagemExcluir;
 	}
 	
-	/**
-	 * Insere a mensagem de confirmação para desativar registro.
-	 *
-	 * @param mensagemDesativar a mensagem de desativar
-	 */
-	public void setMensagemDesativar(String mensagemDesativar) {
-		this.mensagemDesativar = mensagemDesativar;
-	}
-
 	/**
 	 * Definie se será criado os botões na tela.
 	 *
@@ -342,10 +280,6 @@ public abstract class AbstractEditor extends EditorPart implements ISaveablePart
 		return btnExcluir;
 	}
 	
-	public Button getBtnDesativar() {
-		return btnDesativar;
-	}
-
 	/**
 	 * Valida o objeto informado usando o {@link ValidatorHelper#validar(Object)} e 
 	 * verifica também se o sistema está bloqueado através do {@link BloqueioSistemaHelper#validarSistemaBloqueado()}
@@ -368,15 +302,6 @@ public abstract class AbstractEditor extends EditorPart implements ISaveablePart
 	 */
 	protected void showValidationDialog(String mensagem) {
 		new ErroDialog(mensagem).open();
-	}
-	
-	/**
-	 * Obtém a mensagem adequada para desativar ou excluir.
-	 *
-	 * @return a mensagem de desativar ou de excluir
-	 */
-	public String getMensagemDesativarExcluir(){
-		return showExcluir ? mensagemExcluir : mensagemDesativar;
 	}
 	
 	public void redrawBotoes(){

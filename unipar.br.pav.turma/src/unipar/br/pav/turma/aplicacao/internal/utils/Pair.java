@@ -1,4 +1,4 @@
-package unipar.br.pav.turma.application.utils;
+package unipar.br.pav.turma.aplicacao.internal.utils;
 
 import static java.lang.String.format;
 

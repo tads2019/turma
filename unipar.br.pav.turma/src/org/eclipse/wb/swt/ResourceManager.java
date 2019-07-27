@@ -47,7 +47,7 @@ public class ResourceManager extends SWTResourceManager {
 	
 	// what path to get to the "icons" directory without actually including it
     public static final String ICON_ROOT_PATH = "/assets/";
-    public static final String SYMBOLIC_NAME = "br.com.germantech.ecf";
+    public static final String SYMBOLIC_NAME = "unipar.br.pav.turma";
 	////////////////////////////////////////////////////////////////////////////
 	//
 	// Image

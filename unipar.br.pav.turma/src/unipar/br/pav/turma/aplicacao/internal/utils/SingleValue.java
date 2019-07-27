@@ -1,4 +1,4 @@
-package unipar.br.pav.turma.application.utils;
+package unipar.br.pav.turma.aplicacao.internal.utils;
 
 /**
  * Possui a mesma utilidade da classe {@link Pair}, com a diferença

@@ -1,4 +1,4 @@
-package unipar.br.pav.turma.application;
+package unipar.br.pav.turma.aplicacao.internal;
 
 import org.eclipse.ui.application.ActionBarAdvisor;
 import org.eclipse.ui.application.IActionBarConfigurer;

@@ -7,7 +7,7 @@
          point="org.eclipse.core.runtime.applications">
       <application>
          <run
-               class="unipar.br.pav.turma.application.Application">
+               class="unipar.br.pav.turma.aplicacao.internal.Application">
          </run>
       </application>
    </extension>
@@ -21,24 +21,6 @@
    </extension>
    <extension
          point="org.eclipse.ui.views">
-      <view
-            name="View"
-            class="unipar.br.pav.turma.telas.view.View"
-            id="unipar.br.pav.turma.view">
-      </view>
-   </extension>
-   <extension
-         point="org.eclipse.ui.perspectiveExtensions">
-      <perspectiveExtension
-            targetID="*">
-         <view
-               standalone="true"
-               minimized="false"
-               relative="org.eclipse.ui.editorss"
-               relationship="left"
-               id="unipar.br.pav.turma.view">
-         </view>
-      </perspectiveExtension>
    </extension>
    <extension
          point="org.eclipse.ui.menus">
@@ -53,13 +35,16 @@
                   label="Sair">
             </command>
          </menu>
-         <command
-               commandId="unipar.br.pav.turma.command1"
-               style="push">
-         </command>
          <menu
                id="unipar.br.pav.turma.cadastro"
                label="Cadastro">
+            <command
+                  commandId="unipar.br.pav.turma.openExemploCommand"
+                  icon="assets/funcoes/aboutFlag16.png"
+                  id="unipar.br.pav.turma.cadastro.exemplo"
+                  label="Exemplo"
+                  style="push">
+            </command>
          </menu>
       </menuContribution>
    </extension>
@@ -69,6 +54,16 @@
             class="unipar.br.pav.turma.telas.editor.UsuarioEditor"
             id="unipar.br.pav.turma.telas.editor.UsuarioEditor"
             name="Usuário">
+      </editor>
+      <editor
+            class="unipar.br.pav.turma.telas.editor.AlunoEditor"
+            id="unipar.br.pav.turma.telas.editor.AlunoEditor"
+            name="Aluno">
+      </editor>
+      <editor
+            class="unipar.br.pav.turma.telas.editor.ExemploEditor"
+            id="unipar.br.pav.turma.telas.editor.ExemploEditor"
+            name="Exemplo">
       </editor>
    </extension>
    <extension
@@ -82,6 +77,14 @@
                value="Aplicação exemplo">
          </property>
       </product>
+   </extension>
+   <extension
+         point="org.eclipse.ui.commands">
+      <command
+            defaultHandler="unipar.br.pav.turma.aplicacao.command.OpenExemploCommand"
+            id="unipar.br.pav.turma.openExemploCommand"
+            name="Exemplos commnads">
+      </command>
    </extension>
 
 </plugin>
