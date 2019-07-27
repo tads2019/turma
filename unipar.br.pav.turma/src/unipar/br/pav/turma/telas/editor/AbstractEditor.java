@@ -1,28 +1,39 @@
 package unipar.br.pav.turma.telas.editor;
 
-import org.eclipse.jface.dialogs.IDialogConstants;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.jface.action.Action;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.TraverseEvent;
+import org.eclipse.swt.events.TraverseListener;
+import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.ISaveablePart2;
-import org.eclipse.ui.part.EditorPart;
-
-import unipar.br.pav.turma.Activator;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.ScrolledForm;
+import org.eclipse.ui.part.EditorPart;
+import org.eclipse.wb.swt.ResourceManager;
+
+import unipar.br.pav.turma.Activator;
+import unipar.br.pav.turma.aplicacao.exception.ValidationException;
+import unipar.br.pav.turma.aplicacao.helper.MessageHelper;
+import unipar.br.pav.turma.aplicacao.helper.ValidatorHelper;
+import unipar.br.pav.turma.telas.dialog.ErroDialog;
 
 public abstract class AbstractEditor extends EditorPart implements ISaveablePart2{
-	//Cada Editor que implentar dever· criar o seu FormToolkit, por causa do WindowBuilder
+	//Cada Editor que implentar dever√° criar o seu FormToolkit, por causa do WindowBuilder
 	private FormToolkit formToolkit = new FormToolkit(Display.getDefault());
 	
-	/** O {@code form} que ser· base para criaÁ„o dos campos. */
+	/** O {@code form} que ser√° base para cria√ß√£o dos campos. */
 	protected ScrolledForm form;
 	protected Button btnSalvar;
 	private Button btnExcluir;
@@ -78,10 +89,10 @@ public abstract class AbstractEditor extends EditorPart implements ISaveablePart
 		formToolkit.adapt(compositeBottom);
 		formToolkit.paintBordersFor(compositeBottom);
 		
-		//CRIA O BOT√O DE SALVAR
+		//CRIA O BOT√ÉO DE SALVAR
 		this.btnSalvar = new Button(compositeBottom, SWT.NONE);
 		this.btnSalvar.setVisible(showSalvar);
-		this.btnSalvar.setImage(ImageCache.getImage("funcoes/save-gnome32.png"));
+		this.btnSalvar.setImage(ResourceManager.getPluginImage("funcoes/save-gnome32.png"));
 		this.btnSalvar.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -91,51 +102,51 @@ public abstract class AbstractEditor extends EditorPart implements ISaveablePart
 		this.btnSalvar.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
 		formToolkit.adapt(this.btnSalvar, true, true);
 		this.btnSalvar.setText("Salvar | F12");
-		//MODIFICAR TEXTO DO BOT√O DE SALVAR
-		if(StringUtils.isNotBlank(textoSalvar))
+		//MODIFICAR TEXTO DO BOT√ÉO DE SALVAR
+		if(!textoSalvar.trim().equals(""))
 			this.btnSalvar.setText(textoSalvar);
 		
-		//CRIA O BOT√O EXCLUIR
+		//CRIA O BOT√ÉO EXCLUIR
 		if(showExcluir){
 			this.btnExcluir = new Button(compositeBottom, SWT.NONE);
-			this.btnExcluir.setImage(ImageCache.getImage("funcoes/delete-gnome32.png"));
+			this.btnExcluir.setImage(ResourceManager.getPluginImage("funcoes/delete-gnome32.png"));
 			this.btnExcluir.addSelectionListener(new SelectionAdapter() {
 				@Override
 				public void widgetSelected(SelectionEvent e) {
-					if (MessageHelper.openQuestionYesNo(mensagemExcluir) == IDialogConstants.YES_ID)
+					if (MessageHelper.openConfirm(mensagemExcluir))
 						excluirDesativarRegistro();
 				}
 			});
 			this.btnExcluir.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
 			formToolkit.adapt(this.btnExcluir, true, true);
 			this.btnExcluir.setText("Excluir | F11");
-			//MODIFICAR TEXTO DO BOT√O DE EXCLUIR
-			if(StringUtils.isNotBlank(textoExcluir))
+			//MODIFICAR TEXTO DO BOT√ÉO DE EXCLUIR
+			if(textoExcluir != null && textoExcluir.trim().equals(""))
 				this.btnExcluir.setText(textoExcluir);
 			//ADEQUAR MENSAGEM DE EXCLUIR
-			if(StringUtils.isBlank(mensagemExcluir))
+			if(mensagemExcluir != null && mensagemExcluir.trim().equals(mensagemExcluir))
 				mensagemExcluir = "Tem certeza que deseja excluir o registro?";
 		}
 		
-		//CRIA O BOT√O DESATIVAR
+		//CRIA O BOT√ÉO DESATIVAR
 		if(showDesativar){
 			this.btnDesativar = new Button(compositeBottom, SWT.NONE);
-			this.btnDesativar.setImage(ImageCache.getImage("desativar/desativar32.png"));
+			this.btnDesativar.setImage(ResourceManager.getPluginImage("desativar/desativar32.png"));
 			this.btnDesativar.addSelectionListener(new SelectionAdapter() {
 				@Override
 				public void widgetSelected(SelectionEvent e) {
-					if (MessageHelper.openQuestionYesNo(mensagemDesativar) == IDialogConstants.YES_ID)
+					if (MessageHelper.openConfirm(mensagemDesativar))
 						excluirDesativarRegistro();
 				}
 			});
 			this.btnDesativar.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
 			formToolkit.adapt(this.btnDesativar, true, true);
 			this.btnDesativar.setText("Desativar | F11");
-			//MODIFICAR TEXTO DO BOT√O DE DESATIVAR
-			if(StringUtils.isNotBlank(textoDesativar))
+			//MODIFICAR TEXTO DO BOT√ÉO DE DESATIVAR
+			if(textoDesativar != null && !textoDesativar.trim().equals(textoDesativar))
 				this.btnDesativar.setText(textoDesativar);
 			//ADEQUAR MENSAGEM DE DESATIVAR
-			if(StringUtils.isBlank(mensagemDesativar))
+			if(mensagemDesativar != null && mensagemDesativar.trim().equals(""))
 				mensagemDesativar = "Tem certeza que deseja desativar o registro?";
 		}
 		
@@ -153,12 +164,12 @@ public abstract class AbstractEditor extends EditorPart implements ISaveablePart
 	}
 	
 	/**
-	 * MÈtodo para implementar aÁ„o para o bot„o 'Salvar'
+	 * M√©todo para implementar a√ß√£o para o bot√£o 'Salvar'
 	 */
 	protected abstract void salvarRegistro();
 
 	/**
-	 * MÈtodo para implementar aÁ„o para o bot„o 'Excluir' ou 'Desativar'
+	 * M√©todo para implementar a√ß√£o para o bot√£o 'Excluir' ou 'Desativar'
 	 */
 	protected abstract void excluirDesativarRegistro();
 
@@ -184,11 +195,11 @@ public abstract class AbstractEditor extends EditorPart implements ISaveablePart
 	}
 	
 	/**
-	 * Adiciona o bot„o para reativar o registro.
+	 * Adiciona o bot√£o para reativar o registro.
 	 *
-	 * @param acao a aÁ„o do bot„o, quando pressionado
-	 * @param visible indicativo ou codiÁ„o para visualizaÁ„o do bot„o
-	 * @return o bot„o de desativar
+	 * @param acao a a√ß√£o do bot√£o, quando pressionado
+	 * @param visible indicativo ou codi√ß√£o para visualiza√ß√£o do bot√£o
+	 * @return o bot√£o de desativar
 	 * @since 4.25.0
 	 */
 	protected Button addBotaoReativar(final Action acao, boolean visible){
@@ -196,7 +207,7 @@ public abstract class AbstractEditor extends EditorPart implements ISaveablePart
 	}
 
 	/**
-	 * Fecha o {@code Editor} que est· em ativo.
+	 * Fecha o {@code Editor} que est√° em ativo.
 	 */
 	protected void closeThisEditor() {
 		getEditorSite().getPart().getSite().getWorkbenchWindow().getActivePage().closeEditor(this, false);
@@ -226,17 +237,6 @@ public abstract class AbstractEditor extends EditorPart implements ISaveablePart
 		monitor.done();
 	}
 	
-	/**
-	 * Verifica se a exceÁ„o È uma exceÁ„o do tipo {@link DatabaseException}, e se for, pega a exceÁ„o do banco para
-	 * mostrar uma mensagem mais legÌvel
-	 * @param e exceÁ„o a ser validada
-	 * @return a mensagem, de uma forma mais legÌvel
-	 */
-	public static String validarException(Exception e){
-		SQLException exc = ExceptionHelper.getNextException(e);
-		return exc == null ? e.getMessage() : exc.getMessage();
-	}
-	
 	protected void addEnterNextListener(final Control controle){
 		controle.addTraverseListener(new TraverseListener() {
 			
@@ -250,13 +250,13 @@ public abstract class AbstractEditor extends EditorPart implements ISaveablePart
 	
 	public void setShowDesativar(boolean showDesativar) {
 		this.showDesativar = showDesativar;
-		//SE FOR DESATIVAR, N√O ATIVA O EXCLUIR
+		//SE FOR DESATIVAR, N√ÉO ATIVA O EXCLUIR
 		this.showExcluir = false;
 	}
 
 	public void setShowExcluir(boolean showExcluir) {
 		this.showExcluir = showExcluir;
-		//SE FOR EXCLUIR, N√O ATIVA O DESATIVAR
+		//SE FOR EXCLUIR, N√ÉO ATIVA O DESATIVAR
 		this.showDesativar = false;
 	}
 	
@@ -277,7 +277,7 @@ public abstract class AbstractEditor extends EditorPart implements ISaveablePart
 	}
 
 	/**
-	 * Insere a mensagem de confirmaÁ„o para excluir registro.
+	 * Insere a mensagem de confirma√ß√£o para excluir registro.
 	 *
 	 * @param mensagemExcluir a mensagem de excluir
 	 */
@@ -286,7 +286,7 @@ public abstract class AbstractEditor extends EditorPart implements ISaveablePart
 	}
 	
 	/**
-	 * Insere a mensagem de confirmaÁ„o para desativar registro.
+	 * Insere a mensagem de confirma√ß√£o para desativar registro.
 	 *
 	 * @param mensagemDesativar a mensagem de desativar
 	 */
@@ -295,9 +295,9 @@ public abstract class AbstractEditor extends EditorPart implements ISaveablePart
 	}
 
 	/**
-	 * Definie se ser· criado os botıes na tela.
+	 * Definie se ser√° criado os bot√µes na tela.
 	 *
-	 * @param show informar 'true' para criar os botıes
+	 * @param show informar 'true' para criar os bot√µes
 	 */
 	public void showBottom(boolean show){
 		this.bottomVisible = show;
@@ -312,15 +312,15 @@ public abstract class AbstractEditor extends EditorPart implements ISaveablePart
 	}
 	
 	/**
-	 * Insere o tÌtulo do {@code Form} do {@code Editor}
-	 * @param titulo o tÌtulo para o form
+	 * Insere o t√≠tulo do {@code Form} do {@code Editor}
+	 * @param titulo o t√≠tulo para o form
 	 */
 	public void setTitulo(String titulo){
 		this.form.setText(titulo);
 	}
 	
 	/**
-	 * Insere a imagem do {@link #form} do {@code Editor}. Dever· ser informada uma imagem com tamanho 32x32
+	 * Insere a imagem do {@link #form} do {@code Editor}. Dever√° ser informada uma imagem com tamanho 32x32
 	 * @param image a imagem do form
 	 */
 	public void setImagem(Image image){
@@ -329,15 +329,10 @@ public abstract class AbstractEditor extends EditorPart implements ISaveablePart
 
 	@Override
 	public int promptToSaveOnClose() {
-		int ret = MessageHelper.openQuestionYesNoCancel("O registro foi alterado. Deseja salvar as alteraÁıes?");
+		boolean ret = MessageHelper.openConfirm("O registro foi alterado. Deseja salvar as altera√ß√µes?");
 		
-		if(ret == IDialogConstants.YES_ID){
+		if(ret){
 			salvarRegistro();
-		}
-		
-		if(ret == IDialogConstants.NO_ID) {
-			EntityManagerHelper.revertChanges();
-			return NO;
 		}
 		
 		return CANCEL;
@@ -353,15 +348,14 @@ public abstract class AbstractEditor extends EditorPart implements ISaveablePart
 
 	/**
 	 * Valida o objeto informado usando o {@link ValidatorHelper#validar(Object)} e 
-	 * verifica tambÈm se o sistema est· bloqueado atravÈs do {@link BloqueioSistemaHelper#validarSistemaBloqueado()}
+	 * verifica tamb√©m se o sistema est√° bloqueado atrav√©s do {@link BloqueioSistemaHelper#validarSistemaBloqueado()}
 	 *
 	 * @param obj o objeto a ser validado
-	 * @throws ValidationException a exceÁ„o da validaÁ„o do objeto
+	 * @throws ValidationException a exce√ß√£o da valida√ß√£o do objeto
 	 */
 	protected void validar(Object obj) throws ValidationException {
 		try {
 			ValidatorHelper.validar(obj);
-			BloqueioSistemaHelper.validarSistemaBloqueado();
 		} catch (ValidationException e) {
 			throw e;
 		}
@@ -370,46 +364,14 @@ public abstract class AbstractEditor extends EditorPart implements ISaveablePart
 	/**
 	 * Abre o {@code ErroDialog} com a mensagem de erro informada
 	 *
-	 * @param mensagem a mensagem do erro/exceÁ„o
+	 * @param mensagem a mensagem do erro/exce√ß√£o
 	 */
 	protected void showValidationDialog(String mensagem) {
 		new ErroDialog(mensagem).open();
 	}
 	
-	protected void desativar(Control control){
-		if (control.getClass().equals(Group.class)) {
-			Group g = (Group) control;
-			for (Control c : g.getChildren()) {
-				desativar(c);
-			}
-		}
-		
-		if (control.getClass().equals(Text.class)
-				|| control.getClass().equals(Combo.class)
-				|| control.getClass().equals(Button.class)
-				|| control.getClass().equals(Table.class)) {
-			control.setEnabled(false);
-		}
-	}
-	
-	protected void ativar(Control control){
-		if (control.getClass().equals(Group.class)) {
-			Group g = (Group) control;
-			for (Control c : g.getChildren()) {
-				ativar(c);
-			}
-		}
-		
-		if (control.getClass().equals(Text.class)
-				|| control.getClass().equals(Combo.class)
-				|| control.getClass().equals(Button.class)
-				|| control.getClass().equals(Table.class)) {
-			control.setEnabled(true);
-		}
-	}
-	
 	/**
-	 * ObtÈm a mensagem adequada para desativar ou excluir.
+	 * Obt√©m a mensagem adequada para desativar ou excluir.
 	 *
 	 * @return a mensagem de desativar ou de excluir
 	 */

@@ -132,7 +132,6 @@ public class SWTResourceManager {
 	 *            the path to the image file
 	 * @return the {@link Image} stored in the file at the specified path
 	 */
-	@SuppressWarnings("resource")
 	public static Image getImage(String path) {
 		Image image = m_imageMap.get(path);
 		if (image == null) {

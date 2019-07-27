@@ -71,5 +71,17 @@
             name="Usuário">
       </editor>
    </extension>
+   <extension
+         id="product"
+         point="org.eclipse.core.runtime.products">
+      <product
+            application="unipar.br.pav.turma.application"
+            name="Aplicação exemplo">
+         <property
+               name="appName"
+               value="Aplicação exemplo">
+         </property>
+      </product>
+   </extension>
 
 </plugin>
