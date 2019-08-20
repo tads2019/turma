@@ -9,7 +9,7 @@ import org.eclipse.ui.IPersistableElement;
  * 
  * @author Filipe Wutzke
  */
-public abstract class AsbtractEditorInputAdapter implements IEditorInput {
+public abstract class AbstractEditorInputAdapter implements IEditorInput {
 
 	@SuppressWarnings("rawtypes")
 	@Override

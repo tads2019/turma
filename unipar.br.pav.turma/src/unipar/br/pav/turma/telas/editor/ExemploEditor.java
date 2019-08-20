@@ -26,7 +26,6 @@ public class ExemploEditor extends AbstractEditor {
 
 	@Override
 	protected void addComponents(Composite compositeTop) {
-		// TODO Auto-generated method stub
 		Composite container = compositeTop;
 		container.setLayout(new GridLayout(2, false));
 		

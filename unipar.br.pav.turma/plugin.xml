@@ -21,6 +21,11 @@
    </extension>
    <extension
          point="org.eclipse.ui.views">
+      <view
+            class="unipar.br.pav.turma.telas.view.ExemploView"
+            id="unipar.br.pav.turma.telas.view.ExemploView"
+            name="Exemplos">
+      </view>
    </extension>
    <extension
          point="org.eclipse.ui.menus">
@@ -43,6 +48,13 @@
                   icon="assets/funcoes/aboutFlag16.png"
                   id="unipar.br.pav.turma.cadastro.exemplo"
                   label="Exemplo"
+                  style="push">
+            </command>
+            <command
+                  commandId="unipar.br.pav.turma.exemploTrabalhoDialogCommand"
+                  icon="assets/funcoes/bookmarkHelp16.png"
+                  id="unipar.br.pav.turma.cadastro.exemploTrabalho"
+                  label="Exemplo TRABALHO"
                   style="push">
             </command>
          </menu>
@@ -84,6 +96,11 @@
             defaultHandler="unipar.br.pav.turma.aplicacao.command.OpenExemploCommand"
             id="unipar.br.pav.turma.openExemploCommand"
             name="Exemplos commnads">
+      </command>
+      <command
+            defaultHandler="unipar.br.pav.turma.aplicacao.command.OpenExemploTrabalhoDialogCommand"
+            id="unipar.br.pav.turma.exemploTrabalhoDialogCommand"
+            name="Exemplo Trabalho">
       </command>
    </extension>
 

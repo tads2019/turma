@@ -78,7 +78,7 @@ public abstract class AbstractEditor extends EditorPart implements ISaveablePart
 		//CRIA O BOTÃO DE SALVAR
 		this.btnSalvar = new Button(compositeBottom, SWT.NONE);
 		this.btnSalvar.setVisible(showSalvar);
-		this.btnSalvar.setImage(ResourceManager.getPluginImage("funcoes/save-gnome32.png"));
+		this.btnSalvar.setImage(ResourceManager.getPluginImage("unipar.br.pav.turma", "assets/funcoes/save-gnome32.png"));
 		this.btnSalvar.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -95,7 +95,7 @@ public abstract class AbstractEditor extends EditorPart implements ISaveablePart
 		//CRIA O BOTÃO EXCLUIR
 		if(showExcluir){
 			this.btnExcluir = new Button(compositeBottom, SWT.NONE);
-			this.btnExcluir.setImage(ResourceManager.getPluginImage("funcoes/delete-gnome32.png"));
+			this.btnExcluir.setImage(ResourceManager.getPluginImage("unipar.br.pav.turma", "assets/funcoes/delete-gnome32.png"));
 			this.btnExcluir.addSelectionListener(new SelectionAdapter() {
 				@Override
 				public void widgetSelected(SelectionEvent e) {
