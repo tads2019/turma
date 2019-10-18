@@ -63,16 +63,6 @@
    <extension
          point="org.eclipse.ui.editors">
       <editor
-            class="unipar.br.pav.turma.telas.editor.UsuarioEditor"
-            id="unipar.br.pav.turma.telas.editor.UsuarioEditor"
-            name="Usuário">
-      </editor>
-      <editor
-            class="unipar.br.pav.turma.telas.editor.AlunoEditor"
-            id="unipar.br.pav.turma.telas.editor.AlunoEditor"
-            name="Aluno">
-      </editor>
-      <editor
             class="unipar.br.pav.turma.telas.editor.ExemploEditor"
             id="unipar.br.pav.turma.telas.editor.ExemploEditor"
             name="Exemplo">
@@ -102,6 +92,26 @@
             id="unipar.br.pav.turma.exemploTrabalhoDialogCommand"
             name="Exemplo Trabalho">
       </command>
+      <command
+            defaultHandler="unipar.br.pav.turma.aplicacao.command.EscPressionadoCommand"
+            id="unipar.br.pav.turma.escPressionadoCommand"
+            name="ESC">
+      </command>
+   </extension>
+   <extension
+         point="org.eclipse.ui.bindings">
+      <scheme
+            description="Pra poder bindar os campos"
+            id="unipar.scheme"
+            name="UNIPAR Scheme"
+            parentId="org.eclipse.ui.defaultAcceleratorConfiguration">
+      </scheme>
+      <key
+            commandId="unipar.br.pav.turma.escPressionadoCommand"
+            contextId="org.eclipse.ui.contexts.window"
+            schemeId="unipar.scheme"
+            sequence="ESC">
+      </key>
    </extension>
 
 </plugin>
