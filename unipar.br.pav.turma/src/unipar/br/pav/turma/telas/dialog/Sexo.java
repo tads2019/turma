@@ -5,8 +5,6 @@ public enum Sexo {
 	MASCULINO("M", "Masculino"),
 	FEMININO("F", "Feminino"),
 	BISEXUAL("B", "Bisexual"),
-	ANDRÓGINO("A", "Andrógino"),
-	BIGENERO("2", "Bigênero"),
 	TRANSSEXUAL("T", "Transsexual");
 	
 	private Sexo(String sigla, String descricao){

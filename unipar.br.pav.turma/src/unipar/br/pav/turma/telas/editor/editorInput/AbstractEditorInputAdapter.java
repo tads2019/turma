@@ -11,7 +11,7 @@ import org.eclipse.ui.IPersistableElement;
  */
 public abstract class AbstractEditorInputAdapter implements IEditorInput {
 
-	@SuppressWarnings("rawtypes")
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
 	public Object getAdapter(Class adapter) {
 		return null;
