@@ -18,7 +18,7 @@ public class Exemplo implements Serializable {
 	private Long id;
 	
 	@Column
-	private String exemplo;
+	private String exemplo = "Informação de exemplo";
 
 	public Long getId() {
 		return id;

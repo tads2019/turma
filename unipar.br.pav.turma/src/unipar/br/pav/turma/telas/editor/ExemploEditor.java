@@ -1,5 +1,9 @@
 package unipar.br.pav.turma.telas.editor;
 
+import org.eclipse.core.databinding.DataBindingContext;
+import org.eclipse.core.databinding.beans.PojoProperties;
+import org.eclipse.core.databinding.observable.value.IObservableValue;
+import org.eclipse.jface.databinding.swt.WidgetProperties;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -12,16 +16,12 @@ import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
+import unipar.br.pav.turma.aplicacao.helper.MessageHelper;
 import unipar.br.pav.turma.modelo.Exemplo;
 import unipar.br.pav.turma.telas.editor.editorInput.ExemploEditorInput;
-import org.eclipse.core.databinding.DataBindingContext;
-import org.eclipse.core.databinding.observable.value.IObservableValue;
-import org.eclipse.jface.databinding.swt.WidgetProperties;
-import org.eclipse.core.databinding.beans.PojoProperties;
 
 public class ExemploEditor extends AbstractEditor {
-	private DataBindingContext bindingContext;
-
+	private DataBindingContext m_bindingContext;
 	public static final String ID = "unipar.br.pav.turma.telas.editor.ExemploEditor"; //$NON-NLS-1$
 	private final FormToolkit formToolkit = new FormToolkit(Display.getDefault());
 	private Exemplo exemplo;
@@ -46,13 +46,13 @@ public class ExemploEditor extends AbstractEditor {
 		txtTexto.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		formToolkit.adapt(txtTexto, true, true);
 		
-		bindingContext = initDataBindings();
+		m_bindingContext = initDataBindings();
 	}
 
 	@Override
 	protected void salvarRegistro() {
 		// TODO Auto-generated method stub
-		
+		MessageHelper.openInformation("Texto digitado: "+exemplo.getExemplo());
 	}
 
 	@Override
